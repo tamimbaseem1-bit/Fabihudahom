@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>فَبِهُدَاهُمُ اقْتَدِهْ</title>
+<link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+</head>
+<body>
+
+<!-- ══ PORTAL ══ -->
+<div id="portal-screen" class="screen active">
+
+  <div class="portal-bg"></div>
+  <div class="portal-pattern"></div>
+
+  <div class="portal-inner">
+      <img
+        src="bihudahum.png"
+        alt="فَبِهُدَاهُمُ اقْتَدِهْ"
+        class="portal-title-img"
+      >
+      <div class="portal-divider"></div>
+    </div>
+
+    <div class="portal-btns">
+      <button
+        class="portal-btn student"
+        onclick="gotoLogin('student')">
+        طالب
+      </button>
+
+      <button
+        class="portal-btn admin"
+        onclick="gotoLogin('admin')">
+        مشرف
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- ══ LOGIN ══ -->
+<div id="login-screen" class="screen">
+  <button class="login-back" onclick="gotoPortal()">← رجوع</button>
+  <div class="login-content">
+    <div class="login-logo">فَبِهُدَاهُمُ اقْتَدِهْ</div>
+    <div class="login-tagline" id="login-tagline">رحلة صناعة طالب العلم</div>
+    <div class="login-card">
+      <div class="login-role-tag" id="login-role-tag">طالب</div>
+      <label class="form-lbl">اسم المستخدم</label>
+      <input class="form-inp" id="usr-inp" type="text" placeholder="أدخل اسم المستخدم" autocomplete="off">
+      <label class="form-lbl">كلمة المرور</label>
+      <input class="form-inp" id="pw-inp" type="password" placeholder="أدخل كلمة المرور">
+      <button class="login-submit" onclick="doLogin()">دخول</button>
+      <div class="login-err" id="login-err">اسم المستخدم أو كلمة المرور غير صحيحة</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP (STUDENT) ══ -->
+<div id="app-screen" class="screen">
+  <div class="topbar">
+    <button class="topbar-bell" onclick="openNotifPanel()"><span class="topbar-bell-dot" id="bell-dot"></span>🔔</button>
+    <div class="topbar-title-wrap">
+      <div class="topbar-title">فَبِهُدَاهُمُ اقْتَدِهْ</div>
+      <div class="topbar-sub">رحلة صناعة طالب العلم</div>
+    </div>
+    <button class="topbar-logout" onclick="doLogout()" title="تسجيل الخروج">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+    <polyline points="16 17 21 12 16 7"/>
+    <line x1="21" y1="12" x2="9" y2="12"/>
+  </svg>
+</button>
+  </div>
+
+  <div class="app-body">
+
+    <!-- HOME -->
+    <div class="sec active" id="sec-home">
+      <div class="hero-card">
+        <div class="hero-top">
+          <div class="hero-avatar" id="h-avatar">أ</div>
+          <div class="hero-info">
+            <div class="hero-greeting">السلام عليكم</div>
+            <div class="hero-name" id="h-name">—</div>
+            <div class="rank-pill">👑 <span id="h-rank">طويلب علم</span></div>
+          </div>
+          <div class="hero-pts-wrap">
+            <div class="hero-pts-num" id="h-pts">0</div>
+            <div class="hero-pts-lbl">نقطة</div>
+          </div>
+        </div>
+        <div class="hero-xp-bar-wrap" id="h-xp-wrap">
+          <div class="hero-xp-track"><div class="hero-xp-fill" id="h-xp-fill" style="width:0%"></div></div>
+          <div class="hero-xp-labels"><span id="h-xp-pts">0 نقطة</span><span id="h-xp-next">للمرحلة القادمة</span></div>
+        </div>
+        <div class="hero-bottom">
+          <div class="hero-stat-mini">
+            <div class="hero-stat-mini-val" id="h-pos">—</div>
+            <div class="hero-stat-mini-lbl" id="h-pos-lbl">من —</div>
+          </div>
+          <div class="hero-divider"></div>
+          <div class="streak-col">
+            <div class="streak-books-wrap">
+              <div class="streak-books" id="streak-books"></div>
+              <span class="streak-crown" id="streak-crown" style="display:none"></span>
+            </div>
+            <span class="streak-label" id="streak-text">٠ أيام متتالية</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Station -->
+      <div class="card">
+        <div class="station-badge">محطتك الحالية</div>
+        <div class="station-main">
+          <div class="station-img" id="sta-icon">🕌</div>
+          <div class="station-info">
+            <div class="station-title" id="sta-title">الإخلاص</div>
+            <div class="station-guide" id="sta-guide">القدوة: الشيخ أحمد الدوغان</div>
+            <div class="prog-bar"><div class="prog-fill" id="sta-prog" style="width:0%"></div></div>
+            <div class="prog-pct" id="sta-pct">0%</div>
+          </div>
+          <div class="station-num">
+            <div class="station-num-val" id="sta-num">1</div>
+            <div class="station-num-lbl">المحطة</div>
+            <div style="font-size:0.6rem;color:var(--sub)">من 8</div>
+          </div>
+        </div>
+        <button class="station-btn" onclick="switchSec('sec-journey')">متابعة الرحلة &lt;</button>
+      </div>
+
+      <!-- Badges -->
+      <div class="card">
+        <div class="card-title">
+          <span class="card-title-text">🏅 أوسمتي</span>
+          <span class="card-link">عرض كل الأوسمة &lt;</span>
+        </div>
+        <div class="badges-grid">
+          <div class="badge-box gold">
+            <div class="badge-icon">🏅</div>
+            <div class="badge-count" id="b-star">0</div>
+            <div class="badge-lbl">مجتهد الأسبوع</div>
+            <div style="font-size:0.72rem;font-weight:700;color:var(--gold)">× <span id="b-star-x">0</span></div>
+          </div>
+          <div class="badge-box purple">
+            <div class="badge-icon">🌟</div>
+            <div class="badge-count" id="b-akhlaq">0</div>
+            <div class="badge-lbl">نابغة الحلقة</div>
+            <div style="font-size:0.72rem;font-weight:700;color:var(--purple)">× <span id="b-akhlaq-x">0</span></div>
+          </div>
+          <div class="badge-box green">
+            <div class="badge-icon">🏃</div>
+            <div class="badge-count" id="b-sab">0</div>
+            <div class="badge-lbl">السبّاق</div>
+            <div style="font-size:0.72rem;font-weight:700;color:var(--green)">× <span id="b-sab-x">0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quote -->
+      <div class="quote-card">
+        <div class="quote-icon-wrap">🖊️</div>
+        <div class="quote-body">
+          <div class="quote-label">💬 اقتباس اليوم</div>
+          <div class="quote-text" id="q-text">—</div>
+          <div class="quote-author" id="q-author">—</div>
+        </div>
+      </div>
+
+      <!-- Schedule -->
+      <div class="card">
+        <div class="card-title">
+          <span class="card-title-text">📅 جدول هذا الأسبوع</span>
+        </div>
+        <div class="schedule-grid" id="sched-grid"></div>
+      </div>
+
+      <!-- Stats mini -->
+      <div class="card">
+        <div class="card-title">
+          <span class="card-title-text">📊 إحصائيات الحفظ هذا الأسبوع</span>
+        </div>
+        <div class="stats3">
+          <div class="stat3-box">
+            <div class="stat3-icon">📖</div>
+            <div class="stat3-val" id="sm-abyat">0</div>
+            <div class="stat3-unit">بيت</div>
+            <div class="stat3-lbl">الأبيات</div>
+          </div>
+          <div class="stat3-box">
+            <div class="stat3-icon">📜</div>
+            <div class="stat3-val" id="sm-hadith">0</div>
+            <div class="stat3-unit">حديث</div>
+            <div class="stat3-lbl">الأحاديث</div>
+          </div>
+          <div class="stat3-box">
+            <div class="stat3-icon">📕</div>
+            <div class="stat3-val" id="sm-wajh">0</div>
+            <div class="stat3-unit">وجه</div>
+            <div class="stat3-lbl">الأوجه</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /sec-home -->
+
+    <!-- LEADERBOARD -->
+    <div class="sec" id="sec-lb">
+      <div class="card">
+        <div class="card-title"><span class="card-title-text">🏆 لوحة الشرف</span></div>
+        <div class="lb-top3" id="lb-top3"></div>
+        <div class="lb-list" id="lb-list"></div>
+      </div>
+    </div>
+
+    <!-- JOURNEY -->
+    <div class="sec" id="sec-journey">
+      <div class="card">
+        <div class="card-title"><span class="card-title-text">🗺️ خريطة الرحلة العلمية</span></div>
+        <div class="journey-list" id="journey-list"></div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="sec" id="sec-stats">
+      <div class="stats-grid">
+        <div class="stat-big"><div class="stat-big-val" id="st-pts">0</div><div class="stat-big-lbl">مجموع النقاط</div></div>
+        <div class="stat-big"><div class="stat-big-val" id="st-rank">—</div><div class="stat-big-lbl">المركز العام</div></div>
+        <div class="stat-big"><div class="stat-big-val" id="st-att">0</div><div class="stat-big-lbl">أيام الحضور</div></div>
+        <div class="stat-big"><div class="stat-big-val" id="st-tah">0</div><div class="stat-big-lbl">أيام التحضير</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="card-title-text">📊 عدد الالتزام</span></div>
+        <div class="stats3">
+          <div class="stat3-box">
+            <div class="stat3-icon">✅</div>
+            <div class="stat3-val" id="st-att2">0</div>
+            <div class="stat3-unit">يوم</div>
+            <div class="stat3-lbl">الحضور</div>
+          </div>
+          <div class="stat3-box">
+            <div class="stat3-icon">📋</div>
+            <div class="stat3-val" id="st-tah2">0</div>
+            <div class="stat3-unit">يوم</div>
+            <div class="stat3-lbl">التحضير</div>
+          </div>
+          <div class="stat3-box">
+            <div class="stat3-icon">📚</div>
+            <div class="stat3-val" id="st-kit2">0</div>
+            <div class="stat3-unit">يوم</div>
+            <div class="stat3-lbl">الكتاب</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-text">📖 إحصائيات الحفظ الكاملة</span></div>
+        <div class="stats3" style="margin-bottom:10px">
+          <div class="stat3-box">
+            <div class="stat3-icon">📜</div>
+            <div class="stat3-val" id="st-abyat">0</div>
+            <div class="stat3-unit">بيت</div>
+            <div class="stat3-lbl">الأبيات</div>
+          </div>
+          <div class="stat3-box">
+            <div class="stat3-icon">📕</div>
+            <div class="stat3-val" id="st-wajh">0</div>
+            <div class="stat3-unit">وجه</div>
+            <div class="stat3-lbl">الأوجه</div>
+          </div>
+          <div class="stat3-box">
+            <div class="stat3-icon">🕌</div>
+            <div class="stat3-val" id="st-hadith">0</div>
+            <div class="stat3-unit">حديث</div>
+            <div class="stat3-lbl">الأحاديث</div>
+          </div>
+        </div>
+        <!-- Per-week breakdown -->
+        <div style="margin-top:4px" id="st-weekly-breakdown"></div>
+      </div>
+    </div>
+
+  </div><!-- /app-body -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="switchSec('sec-home',this)">
+      <div class="nav-icon">🏠</div><div class="nav-lbl">الرئيسية</div>
+    </button>
+    <button class="nav-btn" onclick="switchSec('sec-journey',this)">
+      <div class="nav-icon">🗺️</div><div class="nav-lbl">الخريطة</div>
+    </button>
+    <button class="nav-btn" onclick="switchSec('sec-stats',this)">
+      <div class="nav-icon">📊</div><div class="nav-lbl">الإحصائيات</div>
+    </button>
+    <button class="nav-btn" onclick="switchSec('sec-lb',this)">
+      <div class="nav-icon">🏆</div><div class="nav-lbl">لوحة الشرف</div>
+    </button>
+  </nav>
+</div>
+
+<!-- ══ ADMIN APP ══ -->
+<div id="admin-screen" class="screen">
+  <div class="admin-header">
+    <button class="admin-h-back" onclick="doLogout()">←</button>
+    <div>
+      <div class="admin-h-title">لوحة المشرف</div>
+      <div style="font-size:0.7rem;color:rgba(255,255,255,0.7)" id="admin-name-lbl">—</div>
+    </div>
+    <div style="margin-right:auto;font-size:1.5rem">⚙️</div>
+  </div>
+
+  <div class="admin-tabs">
+    <button class="admin-tab active" onclick="switchAdminTab('ap-daily',this)">📝 الإدخال</button>
+    <button class="admin-tab" onclick="switchAdminTab('ap-students',this)">👥 الطلاب</button>
+    <button class="admin-tab" onclick="switchAdminTab('ap-awards',this)">🏅 الأوسمة</button>
+    <button class="admin-tab" onclick="switchAdminTab('ap-stats',this);renderStatsTable();if(typeof renderBadgesTable!=='undefined'&&document.getElementById('stats-badges-view').style.display!=='none')renderBadgesTable()">📊 الإحصائيات</button>
+  </div>
+
+  <div style="padding:0 16px 100px;overflow-y:auto;flex:1">
+
+    <!-- DAILY INPUT -->
+    <div class="admin-panel active" id="ap-daily">
+
+      <!-- GOOGLE SHEETS SYNC — attendance/tahdir/kitab/summary come from the Sheet, fully automatic -->
+      <div class="card" id="sheet-sync-card">
+        <div class="card-title">
+          <span class="card-title-text">📊 الحضور من Google Sheet</span>
+          <button class="card-link" style="border:none;background:none;cursor:pointer;font-size:0.78rem" onclick="syncFromSheet()" title="تحديث الآن">🔄 تحديث</button>
+        </div>
+        <p style="font-size:.76rem;color:var(--text-soft);margin-bottom:8px;line-height:1.7">
+          الحضور والتحضير والكتاب والتلخيص الأسبوعي يُسحبون تلقائياً من الشيت في كل مرة تُفتح فيها هذه اللوحة.
+        </p>
+        <div id="sheet-sync-status" style="font-size:.78rem;color:var(--text-soft)"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-text">📝 تسجيل الحفظ والإنجازات</span></div>
+        <label class="m-lbl">اختر الطالب</label>
+        <select class="m-inp" id="adm-sel" onchange="loadAdmStu()">
+          <option value="">— اختر طالباً —</option>
+        </select>
+        <div id="adm-form" style="display:none">
+          <!-- Week selector -->
+          <label class="m-lbl" style="margin-bottom:8px">📅 اختر الأسبوع</label>
+          <div class="week-tabs" id="week-tabs">
+            <button class="week-tab active" onclick="selectWeek(1,this)">الأسبوع 1</button>
+            <button class="week-tab" onclick="selectWeek(2,this)">الأسبوع 2</button>
+            <button class="week-tab" onclick="selectWeek(3,this)">الأسبوع 3</button>
+            <button class="week-tab" onclick="selectWeek(4,this)">الأسبوع 4</button>
+            <button class="week-tab" onclick="selectWeek(5,this)">الأسبوع 5</button>
+            <button class="week-tab" onclick="selectWeek(6,this)">الأسبوع 6</button>
+          </div>
+
+          <!-- Days grid -->
+          <div id="days-grid">
+            <!-- Day 1 -->
+            <div class="day-section">
+              <div class="day-header">☀️ الأحد <span class="day-mem-pts" id="d1-pts-badge"></span></div>
+              <div class="day-checks">
+                <div class="day-check-item"><label><input type="checkbox" id="d1-att" disabled><span>✅ حضور <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
+                <div class="day-check-item"><label><input type="checkbox" id="d1-tah" disabled><span>📋 تحضير <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
+                <div class="day-check-item"><label><input type="checkbox" id="d1-kit" disabled><span>📚 الكتاب <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
+              </div>
+              <div class="day-mem-row">
+                <div class="day-mem-field"><label>أبيات</label><input type="number" class="day-mem-inp" id="d1-aby" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>½ وجه</label><input type="number" class="day-mem-inp" id="d1-hf" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أوجه</label><input type="number" class="day-mem-inp" id="d1-wj" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أحاديث</label><input type="number" class="day-mem-inp" id="d1-hd" min="0" value="0" oninput="calcPts()"></div>
+              </div>
+            </div>
+            <!-- Day 2 -->
+            <div class="day-section">
+              <div class="day-header">🌙 الاثنين <span class="day-mem-pts" id="d2-pts-badge"></span></div>
+              <div class="day-checks">
+                <div class="day-check-item"><label><input type="checkbox" id="d2-att" disabled><span>✅ حضور <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
+                <div class="day-check-item"><label><input type="checkbox" id="d2-tah" disabled><span>📋 تحضير <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
+                <div class="day-check-item"><label><input type="checkbox" id="d2-kit" disabled><span>📚 الكتاب <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
+              </div>
+              <div class="day-mem-row">
+                <div class="day-mem-field"><label>أبيات</label><input type="number" class="day-mem-inp" id="d2-aby" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>½ وجه</label><input type="number" class="day-mem-inp" id="d2-hf" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أوجه</label><input type="number" class="day-mem-inp" id="d2-wj" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أحاديث</label><input type="number" class="day-mem-inp" id="d2-hd" min="0" value="0" oninput="calcPts()"></div>
+              </div>
+            </div>
+            <!-- Day 3 -->
+            <div class="day-section">
+              <div class="day-header">🌿 الثلاثاء <span class="day-mem-pts" id="d3-pts-badge"></span></div>
+              <div class="day-checks">
+                <div class="day-check-item"><label><input type="checkbox" id="d3-att" disabled><span>✅ حضور <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
+                <div class="day-check-item"><label><input type="checkbox" id="d3-tah" disabled><span>📋 تحضير <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
+                <div class="day-check-item"><label><input type="checkbox" id="d3-kit" disabled><span>📚 الكتاب <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
+              </div>
+              <div class="day-mem-row">
+                <div class="day-mem-field"><label>أبيات</label><input type="number" class="day-mem-inp" id="d3-aby" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>½ وجه</label><input type="number" class="day-mem-inp" id="d3-hf" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أوجه</label><input type="number" class="day-mem-inp" id="d3-wj" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أحاديث</label><input type="number" class="day-mem-inp" id="d3-hd" min="0" value="0" oninput="calcPts()"></div>
+              </div>
+            </div>
+            <!-- Day 4 -->
+            <div class="day-section">
+              <div class="day-header">📖 الأربعاء <span class="day-mem-pts" id="d4-pts-badge"></span></div>
+              <div class="day-checks">
+                <div class="day-check-item"><label><input type="checkbox" id="d4-att" disabled><span>✅ حضور <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
+                <div class="day-check-item"><label><input type="checkbox" id="d4-tah" disabled><span>📋 تحضير <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
+                <div class="day-check-item"><label><input type="checkbox" id="d4-kit" disabled><span>📚 الكتاب <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
+              </div>
+              <div class="day-mem-row">
+                <div class="day-mem-field"><label>أبيات</label><input type="number" class="day-mem-inp" id="d4-aby" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>½ وجه</label><input type="number" class="day-mem-inp" id="d4-hf" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أوجه</label><input type="number" class="day-mem-inp" id="d4-wj" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أحاديث</label><input type="number" class="day-mem-inp" id="d4-hd" min="0" value="0" oninput="calcPts()"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weekly summary -->
+          <div class="day-section" id="weekly-summary-section" style="background:var(--gold-light);border:1.5px solid var(--gold-pale)">
+            <div class="day-header" style="color:var(--gold)">📝 تلخيص أسبوعي</div>
+            <div class="day-check-item" style="background:#fff;display:inline-flex;width:auto;padding:10px 20px">
+              <label style="flex-direction:row;gap:10px;font-size:0.85rem;color:var(--text)">
+                <input type="checkbox" id="af-sum" disabled style="width:20px;height:20px;accent-color:var(--gold)">
+                <span>تم التلخيص لهذا الأسبوع (+5 نقاط) <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(من الشيت)</em></span>
+              </label>
+            </div>
+          </div>
+
+          <div id="star-meter" style="border-radius:var(--radius);padding:12px;margin-bottom:10px;border:1.5px solid var(--border);transition:all .3s"></div>
+
+          <div class="calc-box">
+            <div class="calc-box-lbl">النقاط المحسوبة لهذا الأسبوع</div>
+            <div class="calc-box-val" id="adm-calc">0</div>
+          </div>
+          <button class="m-save" onclick="saveWeekly()">💾 حفظ وتسجيل الأسبوع</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STUDENTS -->
+    <div class="admin-panel" id="ap-students">
+      <button class="m-save" style="margin-bottom:14px" onclick="openAddModal()">+ إضافة طالب جديد</button>
+      <div id="adm-stu-list"></div>
+    </div>
+
+    <!-- AWARDS -->
+    <div class="admin-panel" id="ap-awards">
+      <div class="card">
+        <div class="card-title"><span class="card-title-text">🏅 منح الأوسمة الأسبوعية</span></div>
+        <label class="m-lbl">اختر الأسبوع</label>
+        <div class="week-tabs" id="aw-week-tabs" style="margin-bottom:16px">
+          <button class="week-tab active" onclick="selectAwardWeek(1,this)">الأسبوع 1</button>
+          <button class="week-tab" onclick="selectAwardWeek(2,this)">الأسبوع 2</button>
+          <button class="week-tab" onclick="selectAwardWeek(3,this)">الأسبوع 3</button>
+          <button class="week-tab" onclick="selectAwardWeek(4,this)">الأسبوع 4</button>
+          <button class="week-tab" onclick="selectAwardWeek(5,this)">الأسبوع 5</button>
+          <button class="week-tab" onclick="selectAwardWeek(6,this)">الأسبوع 6</button>
+        </div>
+        <label class="m-lbl">اختر الطالب</label>
+        <select class="m-inp" id="aw-sel" onchange="loadAwardState()"><option value="">— اختر طالباً —</option></select>
+        <div id="aw-current-status" style="display:none;margin-bottom:12px;padding:10px 14px;border-radius:var(--radius);background:var(--green-light);border:1px solid var(--green-pale);font-size:0.8rem;color:var(--green)"></div>
+        <div class="m-check-row"><span class="m-check-lbl">🌟 صاحب الخلق الحسن</span><input type="checkbox" class="m-check" id="aw-akhl"></div>
+        <div class="m-check-row"><span class="m-check-lbl">🏃 السبّاق</span><input type="checkbox" class="m-check" id="aw-sab"></div>
+        <button class="m-save" style="margin-top:16px" onclick="saveAward()">💾 حفظ الأوسمة لهذا الأسبوع</button>
+      </div>
+      <div class="card" id="aw-week-summary" style="display:none">
+        <div class="card-title"><span class="card-title-text">📋 أوسمة الأسبوع المختار</span></div>
+        <div id="aw-week-list"></div>
+      </div>
+    </div>
+
+    <!-- STATISTICS -->
+    <div class="admin-panel" id="ap-stats">
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <button class="filter-btn active" id="stats-view-pts" onclick="setStatsView('points',this)">📊 النقاط</button>
+        <button class="filter-btn" id="stats-view-bdg" onclick="setStatsView('badges',this)">🏅 الأوسمة</button>
+      </div>
+      <div id="stats-points-view">
+        <div id="stats-summary-boxes" class="stats-summary"></div>
+        <div class="filter-row" style="flex-wrap:wrap;gap:6px">
+          <button class="filter-btn active" onclick="setStatsFilter('all',this)">الكل</button>
+          <button class="filter-btn" onclick="setStatsFilter('أ',this)">حلقة أ</button>
+          <button class="filter-btn" onclick="setStatsFilter('ب',this)">حلقة ب</button>
+          <div style="margin-right:auto;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span style="font-size:0.75rem;color:var(--sub)">الترتيب:</span>
+            <button class="filter-btn active" id="sort-desc-btn" onclick="setStatsSort('desc',this)">⬇ الأعلى</button>
+            <button class="filter-btn" id="sort-asc-btn" onclick="setStatsSort('asc',this)">⬆ الأقل</button>
+          </div>
+        </div>
+        <div class="stats-table-wrap">
+          <table class="stats-table" id="stats-table">
+            <thead><tr>
+              <th>#</th><th>الاسم</th><th>ح</th><th>النقاط</th>
+              <th>حضور</th><th>تحضير</th><th>كتاب</th><th>أبيات</th><th>أحاديث</th><th>أوجه</th>
+            </tr></thead>
+            <tbody id="stats-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="stats-badges-view" style="display:none">
+        <div class="filter-row" style="flex-wrap:wrap;gap:6px;margin-bottom:12px">
+          <button class="filter-btn active" onclick="setBadgeFilter('all',this)">الكل</button>
+          <button class="filter-btn" onclick="setBadgeFilter('star',this)">🏅 مجتهد الأسبوع</button>
+          <button class="filter-btn" onclick="setBadgeFilter('akhlaq',this)">🌟 الخلق الحسن</button>
+          <button class="filter-btn" onclick="setBadgeFilter('sab',this)">🏃 السبّاق</button>
+        </div>
+        <div id="badge-summary-boxes" class="stats-summary" style="grid-template-columns:1fr 1fr 1fr"></div>
+        <div class="stats-table-wrap">
+          <table class="stats-table" id="badges-table">
+            <thead><tr>
+              <th>#</th><th>الاسم</th><th>ح</th>
+              <th id="bdg-th-star">🏅 مجتهد</th>
+              <th id="bdg-th-akhlaq">🌟 الخلق</th>
+              <th id="bdg-th-sab">🏃 السبّاق</th>
+              <th>المجموع</th>
+            </tr></thead>
+            <tbody id="badges-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL: Edit/Add Student -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="modal-title-text">إضافة طالب</span>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <label class="m-lbl">الاسم الكامل</label>
+    <input class="m-inp" id="m-name" type="text" placeholder="اسم الطالب">
+    <label class="m-lbl">اسم المستخدم</label>
+    <input class="m-inp" id="m-usr" type="text" placeholder="username">
+    <label class="m-lbl">كلمة المرور</label>
+    <input class="m-inp" id="m-pw" type="text" placeholder="password">
+    <label class="m-lbl">الحلقة</label>
+    <select class="m-inp" id="m-halqa">
+      <option value="أ">حلقة أ</option>
+      <option value="ب">حلقة ب</option>
+    </select>
+    <label class="m-lbl">تعديل النقاط الحالية</label>
+    <input class="m-inp" id="m-pts" type="number" min="0" value="0">
+    <button class="m-save" onclick="saveStudent()">حفظ</button>
+    <button class="m-del" id="m-del-btn" onclick="deleteStudent()" style="display:none">🗑️ حذف الطالب</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">✓ تم الحفظ بنجاح</div>
+
+<script src="app.js" type="module"></script>
+</body>
+</html>
