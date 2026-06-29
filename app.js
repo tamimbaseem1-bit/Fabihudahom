@@ -122,7 +122,7 @@ const STAR_COLORS=["🟡","⭐","🌙","📚"];
 // ════════════════════ SUPABASE CONFIG ════════════════════
 const SUPABASE_URL = 'https://cakpfqublqgdinaufpae.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_oal3kdLl1J6Yvl3ydt4RXw_RlEjyRte';
-const APP_VERSION = 'v4.5';
+const APP_VERSION = 'v4.6';
 
 // Show version badge on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -503,13 +503,12 @@ async function doLogin(){
       const cleanName = (match.name||'').trim();
       currentUser={...match, name: cleanName, role:'student'};
       document.getElementById('loading-msg').textContent='جاري تحميل بياناتك...';
-      // Pre-populate leaderboard scores from EXCEL_SCORES for all students
+      // Pre-populate leaderboard with empty scores so all students appear
       if(_cache.students){
         const sc=getScores();
         for(const s of _cache.students){
           const n=(s.name||'').trim();
-          const h=EXCEL_SCORES[n]||{};
-          if(!sc[n]) sc[n]={total:h.total||0,attend:h.attend||0,tahdir:h.tahdir||0,kitab:h.kitab||0,abyat:h.abyat||0,hadith:h.hadith||0,wajh:h.wajh||0,badges:{star:0,akhlaq:0,sab:0}};
+          if(!sc[n]) sc[n]={total:0,attend:0,tahdir:0,kitab:0,abyat:0,hadith:0,wajh:0,badges:{star:0,akhlaq:0,sab:0}};
         }
         saveScores(sc);
       }
@@ -1134,31 +1133,26 @@ function recalcStudentScore(name,st){
     if(awardsData[key]){ if(awardsData[key].akhlaq) akhlaq++; if(awardsData[key].sab) sab++; }
   }
 
-  // الحضور والتحضير والكتاب والتلخيص: من قوقل شيت فقط
-  const hist = EXCEL_SCORES[name] || {};
-  let total   = hist.total   || 0;
-  let attend  = hist.attend  || 0;
-  let tahdir  = hist.tahdir  || 0;
-  let kitab   = hist.kitab   || 0;
-  let abyat   = hist.abyat   || 0;
-  let hadith  = hist.hadith  || 0;
-  let wajh    = hist.wajh    || 0;
-  let starCount = 0;
+  // كل البيانات من weekly_data (ما أدخله المشرف في الموقع)
+  let total=0, attend=0, tahdir=0, kitab=0, abyat=0, hadith=0, wajh=0, starCount=0;
 
-  // الحفظ فقط: من إدخال المشرف في الموقع (weekly_data)
   const weekly=(st.weekly&&st.weekly[name])||{};
   for(let w=1;w<=6;w++){
     const wd=weekly['w'+w];
     if(!wd) continue;
     ['d1','d2','d3','d4'].forEach(d=>{
       const dd=wd[d]||{};
-      // وجه = 5 نقاط، بيت/أبيات = 1 نقطة لكل بيت
-      const newWajh = dd.wj||0;
-      const newAby  = dd.aby||0;
-      abyat += newAby;
-      wajh  += newWajh;
-      total += newWajh*5 + newAby*1;
+      if(dd.att){attend++;total+=1;}
+      if(dd.tah){tahdir++;total+=1;}
+      if(dd.kit){kitab++;total+=1;}
+      const mp=dayMemPtsFromData(dd);
+      abyat+=(dd.aby||0);
+      wajh+=(dd.wj||0);
+      hadith+=(dd.hd||0);
+      total+=mp;
     });
+    if(wd.sum){total+=5;}
+    if(checkWeekStar(wd)) starCount++;
   }
 
   const badges={star:starCount,akhlaq,sab};
