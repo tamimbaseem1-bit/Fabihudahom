@@ -364,61 +364,73 @@
             <!-- Day 1 -->
             <div class="day-section">
               <div class="day-header">☀️ الأحد <span class="day-mem-pts" id="d1-pts-badge"></span></div>
-              <div class="day-checks">
-                <div class="day-check-item"><label><input type="checkbox" id="d1-att" disabled><span>✅ حضور <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
-                <div class="day-check-item"><label><input type="checkbox" id="d1-tah" disabled><span>📋 تحضير <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
-                <div class="day-check-item"><label><input type="checkbox" id="d1-kit" disabled><span>📚 الكتاب <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
-              </div>
+              <div class="mem-type-label">حفظ</div>
               <div class="day-mem-row">
                 <div class="day-mem-field"><label>أبيات</label><input type="number" class="day-mem-inp" id="d1-aby" min="0" value="0" oninput="calcPts()"></div>
                 <div class="day-mem-field"><label>½ وجه</label><input type="number" class="day-mem-inp" id="d1-hf" min="0" value="0" oninput="calcPts()"></div>
                 <div class="day-mem-field"><label>أوجه</label><input type="number" class="day-mem-inp" id="d1-wj" min="0" value="0" oninput="calcPts()"></div>
                 <div class="day-mem-field"><label>أحاديث</label><input type="number" class="day-mem-inp" id="d1-hd" min="0" value="0" oninput="calcPts()"></div>
               </div>
+              <div class="mem-type-label review-label">مراجعة</div>
+              <div class="day-mem-row">
+                <div class="day-mem-field"><label>أبيات</label><input type="number" class="day-mem-inp review-inp" id="d1-raby" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>½ وجه</label><input type="number" class="day-mem-inp review-inp" id="d1-rhf" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أوجه</label><input type="number" class="day-mem-inp review-inp" id="d1-rwj" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أحاديث</label><input type="number" class="day-mem-inp review-inp" id="d1-rhd" min="0" value="0" oninput="calcPts()"></div>
+              </div>
             </div>
             <!-- Day 2 -->
             <div class="day-section">
               <div class="day-header">🌙 الاثنين <span class="day-mem-pts" id="d2-pts-badge"></span></div>
-              <div class="day-checks">
-                <div class="day-check-item"><label><input type="checkbox" id="d2-att" disabled><span>✅ حضور <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
-                <div class="day-check-item"><label><input type="checkbox" id="d2-tah" disabled><span>📋 تحضير <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
-                <div class="day-check-item"><label><input type="checkbox" id="d2-kit" disabled><span>📚 الكتاب <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
-              </div>
+              <div class="mem-type-label">حفظ</div>
               <div class="day-mem-row">
                 <div class="day-mem-field"><label>أبيات</label><input type="number" class="day-mem-inp" id="d2-aby" min="0" value="0" oninput="calcPts()"></div>
                 <div class="day-mem-field"><label>½ وجه</label><input type="number" class="day-mem-inp" id="d2-hf" min="0" value="0" oninput="calcPts()"></div>
                 <div class="day-mem-field"><label>أوجه</label><input type="number" class="day-mem-inp" id="d2-wj" min="0" value="0" oninput="calcPts()"></div>
                 <div class="day-mem-field"><label>أحاديث</label><input type="number" class="day-mem-inp" id="d2-hd" min="0" value="0" oninput="calcPts()"></div>
               </div>
+              <div class="mem-type-label review-label">مراجعة</div>
+              <div class="day-mem-row">
+                <div class="day-mem-field"><label>أبيات</label><input type="number" class="day-mem-inp review-inp" id="d2-raby" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>½ وجه</label><input type="number" class="day-mem-inp review-inp" id="d2-rhf" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أوجه</label><input type="number" class="day-mem-inp review-inp" id="d2-rwj" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أحاديث</label><input type="number" class="day-mem-inp review-inp" id="d2-rhd" min="0" value="0" oninput="calcPts()"></div>
+              </div>
             </div>
             <!-- Day 3 -->
             <div class="day-section">
               <div class="day-header">🌿 الثلاثاء <span class="day-mem-pts" id="d3-pts-badge"></span></div>
-              <div class="day-checks">
-                <div class="day-check-item"><label><input type="checkbox" id="d3-att" disabled><span>✅ حضور <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
-                <div class="day-check-item"><label><input type="checkbox" id="d3-tah" disabled><span>📋 تحضير <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
-                <div class="day-check-item"><label><input type="checkbox" id="d3-kit" disabled><span>📚 الكتاب <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
-              </div>
+              <div class="mem-type-label">حفظ</div>
               <div class="day-mem-row">
                 <div class="day-mem-field"><label>أبيات</label><input type="number" class="day-mem-inp" id="d3-aby" min="0" value="0" oninput="calcPts()"></div>
                 <div class="day-mem-field"><label>½ وجه</label><input type="number" class="day-mem-inp" id="d3-hf" min="0" value="0" oninput="calcPts()"></div>
                 <div class="day-mem-field"><label>أوجه</label><input type="number" class="day-mem-inp" id="d3-wj" min="0" value="0" oninput="calcPts()"></div>
                 <div class="day-mem-field"><label>أحاديث</label><input type="number" class="day-mem-inp" id="d3-hd" min="0" value="0" oninput="calcPts()"></div>
               </div>
+              <div class="mem-type-label review-label">مراجعة</div>
+              <div class="day-mem-row">
+                <div class="day-mem-field"><label>أبيات</label><input type="number" class="day-mem-inp review-inp" id="d3-raby" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>½ وجه</label><input type="number" class="day-mem-inp review-inp" id="d3-rhf" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أوجه</label><input type="number" class="day-mem-inp review-inp" id="d3-rwj" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أحاديث</label><input type="number" class="day-mem-inp review-inp" id="d3-rhd" min="0" value="0" oninput="calcPts()"></div>
+              </div>
             </div>
             <!-- Day 4 -->
             <div class="day-section">
               <div class="day-header">📖 الأربعاء <span class="day-mem-pts" id="d4-pts-badge"></span></div>
-              <div class="day-checks">
-                <div class="day-check-item"><label><input type="checkbox" id="d4-att" disabled><span>✅ حضور <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
-                <div class="day-check-item"><label><input type="checkbox" id="d4-tah" disabled><span>📋 تحضير <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
-                <div class="day-check-item"><label><input type="checkbox" id="d4-kit" disabled><span>📚 الكتاب <em style="font-style:normal;font-size:.62rem;color:var(--gold)">(شيت)</em></span></label></div>
-              </div>
+              <div class="mem-type-label">حفظ</div>
               <div class="day-mem-row">
                 <div class="day-mem-field"><label>أبيات</label><input type="number" class="day-mem-inp" id="d4-aby" min="0" value="0" oninput="calcPts()"></div>
                 <div class="day-mem-field"><label>½ وجه</label><input type="number" class="day-mem-inp" id="d4-hf" min="0" value="0" oninput="calcPts()"></div>
                 <div class="day-mem-field"><label>أوجه</label><input type="number" class="day-mem-inp" id="d4-wj" min="0" value="0" oninput="calcPts()"></div>
                 <div class="day-mem-field"><label>أحاديث</label><input type="number" class="day-mem-inp" id="d4-hd" min="0" value="0" oninput="calcPts()"></div>
+              </div>
+              <div class="mem-type-label review-label">مراجعة</div>
+              <div class="day-mem-row">
+                <div class="day-mem-field"><label>أبيات</label><input type="number" class="day-mem-inp review-inp" id="d4-raby" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>½ وجه</label><input type="number" class="day-mem-inp review-inp" id="d4-rhf" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أوجه</label><input type="number" class="day-mem-inp review-inp" id="d4-rwj" min="0" value="0" oninput="calcPts()"></div>
+                <div class="day-mem-field"><label>أحاديث</label><input type="number" class="day-mem-inp review-inp" id="d4-rhd" min="0" value="0" oninput="calcPts()"></div>
               </div>
             </div>
           </div>

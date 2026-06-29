@@ -1441,11 +1441,15 @@ html{
 .rank-badge.r1{background:var(--gold-light);color:var(--gold)}
 .rank-badge.r2{background:var(--green-light);color:var(--green)}
 .rank-badge.r3{background:#f3eeff;color:var(--purple)}
-.day-mem-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.day-mem-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px}
 .day-mem-field{display:flex;flex-direction:column;gap:3px}
 .day-mem-field label{font-size:0.65rem;font-weight:700;color:var(--sub);text-align:center}
 .day-mem-inp{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:6px 4px;font-family:'Noto Naskh Arabic',serif;font-size:0.85rem;font-weight:700;text-align:center;outline:none;color:var(--text);background:#fff}
 .day-mem-inp:focus{border-color:var(--green)}
+.review-inp{background:#f5f0e8;border-color:#c8b98a}
+.review-inp:focus{border-color:var(--gold)}
+.mem-type-label{font-size:0.7rem;font-weight:700;color:var(--green);margin-top:8px;margin-bottom:2px;padding:2px 8px;background:rgba(46,90,46,0.08);border-radius:6px;display:inline-block}
+.review-label{color:#8B6914;background:rgba(184,144,40,0.1)}
 .day-mem-pts{font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-right:6px;background:var(--border);color:var(--sub);transition:all .2s}
 .day-mem-pts.met{background:var(--green);color:#fff}
 .day-mem-pts.low{background:#fee2e2;color:#dc2626}

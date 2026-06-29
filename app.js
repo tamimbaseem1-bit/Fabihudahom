@@ -122,7 +122,7 @@ const STAR_COLORS=["🟡","⭐","🌙","📚"];
 // ════════════════════ SUPABASE CONFIG ════════════════════
 const SUPABASE_URL = 'https://cakpfqublqgdinaufpae.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_oal3kdLl1J6Yvl3ydt4RXw_RlEjyRte';
-const APP_VERSION = 'v4.8';
+const APP_VERSION = 'v4.9';
 
 // Show version badge on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -256,7 +256,7 @@ async function dbGetWeeklyData(studentName){
   for(const row of rows){
     const wk = 'w'+row.week_num;
     if(!result[wk]) result[wk]={};
-    result[wk][row.day_key] = {att:row.att,tah:row.tah,kit:row.kit,aby:row.aby,wj:row.wj,hd:row.hd,hf:row.hf};
+    result[wk][row.day_key] = {att:row.att,tah:row.tah,kit:row.kit,aby:row.aby,wj:row.wj,hd:row.hd,hf:row.hf,raby:row.raby||0,rwj:row.rwj||0,rhd:row.rhd||0,rhf:row.rhf||0};
   }
   return result;
 }
@@ -271,7 +271,7 @@ async function dbGetAllWeeklyData(){
     if(!result[row.student_name]) result[row.student_name]={};
     const wk = 'w'+row.week_num;
     if(!result[row.student_name][wk]) result[row.student_name][wk]={};
-    result[row.student_name][wk][row.day_key] = {att:row.att,tah:row.tah,kit:row.kit,aby:row.aby,wj:row.wj,hd:row.hd,hf:row.hf};
+    result[row.student_name][wk][row.day_key] = {att:row.att,tah:row.tah,kit:row.kit,aby:row.aby,wj:row.wj,hd:row.hd,hf:row.hf,raby:row.raby||0,rwj:row.rwj||0,rhd:row.rhd||0,rhf:row.rhf||0};
   }
   // Merge weekly summaries (sum field) into result
   try {
@@ -296,6 +296,7 @@ async function dbSaveDay(studentName, weekNum, dayKey, dayData){
     student_name:studentName, week_num:weekNum, day_key:dayKey,
     att:!!dayData.att, tah:!!dayData.tah, kit:!!dayData.kit,
     aby:dayData.aby||0, wj:dayData.wj||0, hd:dayData.hd||0, hf:dayData.hf||0,
+    raby:dayData.raby||0, rwj:dayData.rwj||0, rhd:dayData.rhd||0, rhf:dayData.rhf||0,
     updated_at: new Date().toISOString()
   };
   const res = await fetch(`${SUPABASE_URL}/rest/v1/weekly_data`,{
@@ -966,6 +967,10 @@ function loadWeekData(){
         const el=document.getElementById(d+'-'+f);
         if(el) el.value=dd[f]||0;
       });
+      ['raby','rhf','rwj','rhd'].forEach(f=>{
+        const el=document.getElementById(d+'-'+f);
+        if(el) el.value=dd[f]||0;
+      });
     });
     const sumEl = document.getElementById('af-sum');
     if(sumEl) sumEl.checked=!!weekly.sum;
@@ -977,10 +982,10 @@ function loadWeekData(){
 }
 
 function setupCalc(){
-  const ids=['d1-att','d1-tah','d1-kit','d1-aby','d1-hf','d1-wj','d1-hd',
-             'd2-att','d2-tah','d2-kit','d2-aby','d2-hf','d2-wj','d2-hd',
-             'd3-att','d3-tah','d3-kit','d3-aby','d3-hf','d3-wj','d3-hd',
-             'd4-att','d4-tah','d4-kit','d4-aby','d4-hf','d4-wj','d4-hd',
+  const ids=['d1-aby','d1-hf','d1-wj','d1-hd','d1-raby','d1-rhf','d1-rwj','d1-rhd',
+             'd2-aby','d2-hf','d2-wj','d2-hd','d2-raby','d2-rhf','d2-rwj','d2-rhd',
+             'd3-aby','d3-hf','d3-wj','d3-hd','d3-raby','d3-rhf','d3-rwj','d3-rhd',
+             'd4-aby','d4-hf','d4-wj','d4-hd','d4-raby','d4-rhf','d4-rwj','d4-rhd',
              'af-sum'];
   ids.forEach(id=>{
     const el=document.getElementById(id);
@@ -989,10 +994,15 @@ function setupCalc(){
 }
 
 function dayMemPts(d){
-  return parseInt(document.getElementById(d+'-aby').value||0)*1
-       + parseInt(document.getElementById(d+'-hf').value||0)*5
-       + parseFloat(document.getElementById(d+'-wj').value||0)*10
-       + parseInt(document.getElementById(d+'-hd').value||0)*3;
+  const hifdhPts = parseInt(document.getElementById(d+'-aby').value||0)*1
+                 + parseInt(document.getElementById(d+'-hf').value||0)*5
+                 + parseFloat(document.getElementById(d+'-wj').value||0)*10
+                 + parseInt(document.getElementById(d+'-hd').value||0)*3;
+  const reviewPts = (parseInt(document.getElementById(d+'-raby').value||0)*1
+                  + parseInt(document.getElementById(d+'-rhf').value||0)*5
+                  + parseFloat(document.getElementById(d+'-rwj').value||0)*10
+                  + parseInt(document.getElementById(d+'-rhd').value||0)*3) / 3;
+  return hifdhPts + reviewPts;
 }
 
 function calcPts(){
@@ -1053,15 +1063,12 @@ async function saveWeekly(){
   const name=document.getElementById('adm-sel').value;
   if(!name) return;
 
+  const gv=(id,float)=>float?parseFloat(document.getElementById(id).value||0):parseInt(document.getElementById(id).value||0);
   const newWeek={
-    d1:{att:document.getElementById('d1-att').checked,tah:document.getElementById('d1-tah').checked,kit:document.getElementById('d1-kit').checked,
-        aby:parseInt(document.getElementById('d1-aby').value||0),hf:parseInt(document.getElementById('d1-hf').value||0),wj:parseFloat(document.getElementById('d1-wj').value||0),hd:parseInt(document.getElementById('d1-hd').value||0)},
-    d2:{att:document.getElementById('d2-att').checked,tah:document.getElementById('d2-tah').checked,kit:document.getElementById('d2-kit').checked,
-        aby:parseInt(document.getElementById('d2-aby').value||0),hf:parseInt(document.getElementById('d2-hf').value||0),wj:parseFloat(document.getElementById('d2-wj').value||0),hd:parseInt(document.getElementById('d2-hd').value||0)},
-    d3:{att:document.getElementById('d3-att').checked,tah:document.getElementById('d3-tah').checked,kit:document.getElementById('d3-kit').checked,
-        aby:parseInt(document.getElementById('d3-aby').value||0),hf:parseInt(document.getElementById('d3-hf').value||0),wj:parseFloat(document.getElementById('d3-wj').value||0),hd:parseInt(document.getElementById('d3-hd').value||0)},
-    d4:{att:document.getElementById('d4-att').checked,tah:document.getElementById('d4-tah').checked,kit:document.getElementById('d4-kit').checked,
-        aby:parseInt(document.getElementById('d4-aby').value||0),hf:parseInt(document.getElementById('d4-hf').value||0),wj:parseFloat(document.getElementById('d4-wj').value||0),hd:parseInt(document.getElementById('d4-hd').value||0)},
+    d1:{aby:gv('d1-aby'),hf:gv('d1-hf'),wj:gv('d1-wj',true),hd:gv('d1-hd'),raby:gv('d1-raby'),rhf:gv('d1-rhf'),rwj:gv('d1-rwj',true),rhd:gv('d1-rhd')},
+    d2:{aby:gv('d2-aby'),hf:gv('d2-hf'),wj:gv('d2-wj',true),hd:gv('d2-hd'),raby:gv('d2-raby'),rhf:gv('d2-rhf'),rwj:gv('d2-rwj',true),rhd:gv('d2-rhd')},
+    d3:{aby:gv('d3-aby'),hf:gv('d3-hf'),wj:gv('d3-wj',true),hd:gv('d3-hd'),raby:gv('d3-raby'),rhf:gv('d3-rhf'),rwj:gv('d3-rwj',true),rhd:gv('d3-rhd')},
+    d4:{aby:gv('d4-aby'),hf:gv('d4-hf'),wj:gv('d4-wj',true),hd:gv('d4-hd'),raby:gv('d4-raby'),rhf:gv('d4-rhf'),rwj:gv('d4-rwj',true),rhd:gv('d4-rhd')},
     sum:document.getElementById('af-sum').checked,
   };
 
@@ -1105,7 +1112,9 @@ async function saveWeekly(){
 }
 
 function dayMemPtsFromData(dd){
-  return (dd.aby||0)*1 + (dd.hf||0)*5 + (dd.wj||0)*10 + (dd.hd||0)*3;
+  const hifdh = (dd.aby||0)*1 + (dd.hf||0)*5 + (dd.wj||0)*10 + (dd.hd||0)*3;
+  const review = ((dd.raby||0)*1 + (dd.rhf||0)*5 + (dd.rwj||0)*10 + (dd.rhd||0)*3) / 3;
+  return hifdh + review;
 }
 
 function checkWeekStar(wd){
