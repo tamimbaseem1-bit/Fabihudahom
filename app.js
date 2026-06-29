@@ -122,7 +122,7 @@ const STAR_COLORS=["🟡","⭐","🌙","📚"];
 // ════════════════════ SUPABASE CONFIG ════════════════════
 const SUPABASE_URL = 'https://cakpfqublqgdinaufpae.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_oal3kdLl1J6Yvl3ydt4RXw_RlEjyRte';
-const APP_VERSION = 'v4.4';
+const APP_VERSION = 'v4.5';
 
 // Show version badge on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -1134,7 +1134,7 @@ function recalcStudentScore(name,st){
     if(awardsData[key]){ if(awardsData[key].akhlaq) akhlaq++; if(awardsData[key].sab) sab++; }
   }
 
-  // Historical base from Google Sheets import
+  // الحضور والتحضير والكتاب والتلخيص: من قوقل شيت فقط
   const hist = EXCEL_SCORES[name] || {};
   let total   = hist.total   || 0;
   let attend  = hist.attend  || 0;
@@ -1145,24 +1145,20 @@ function recalcStudentScore(name,st){
   let wajh    = hist.wajh    || 0;
   let starCount = 0;
 
+  // الحفظ فقط: من إدخال المشرف في الموقع (weekly_data)
   const weekly=(st.weekly&&st.weekly[name])||{};
-
   for(let w=1;w<=6;w++){
     const wd=weekly['w'+w];
     if(!wd) continue;
     ['d1','d2','d3','d4'].forEach(d=>{
       const dd=wd[d]||{};
-      if(dd.att){attend++;total+=1;}
-      if(dd.tah){tahdir++;total+=1;}
-      if(dd.kit){kitab++;total+=1;}
-      const mp=dayMemPtsFromData(dd);
-      abyat+=(dd.aby||0);
-      wajh+=(dd.wj||0);
-      hadith+=(dd.hd||0);
-      total+=mp;
+      // وجه = 5 نقاط، بيت/أبيات = 1 نقطة لكل بيت
+      const newWajh = dd.wj||0;
+      const newAby  = dd.aby||0;
+      abyat += newAby;
+      wajh  += newWajh;
+      total += newWajh*5 + newAby*1;
     });
-    if(wd.sum) total+=5;
-    if(checkWeekStar(wd)) starCount++;
   }
 
   const badges={star:starCount,akhlaq,sab};
