@@ -122,7 +122,7 @@ const STAR_COLORS=["🟡","⭐","🌙","📚"];
 // ════════════════════ SUPABASE CONFIG ════════════════════
 const SUPABASE_URL = 'https://cakpfqublqgdinaufpae.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_oal3kdLl1J6Yvl3ydt4RXw_RlEjyRte';
-const APP_VERSION = 'v4.2';
+const APP_VERSION = 'v4.3';
 
 // Show version badge on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -500,17 +500,18 @@ async function doLogin(){
       const match = _cache.students.find(s=>(s.u||s.username)===u&&(s.p||s.password)===p);
       if(!match){hideLoadingOverlay();errEl.style.display='block';btn.textContent='دخول';btn.disabled=false;return;}
       
-      currentUser={...match,role:'student'};
+      const cleanName = (match.name||'').trim();
+      currentUser={...match, name: cleanName, role:'student'};
       document.getElementById('loading-msg').textContent='جاري تحميل بياناتك...';
-      const weekly = await dbGetWeeklyData(match.name);
+      const weekly = await dbGetWeeklyData(cleanName);
       // Merge weekly summaries into weekly cache
-      const sums = await dbGetWeeklySummaries(match.name);
+      const sums = await dbGetWeeklySummaries(cleanName);
       for(const wk in sums){ if(!weekly[wk]) weekly[wk]={}; weekly[wk].sum=true; }
       if(!_cache.weekly) _cache.weekly={};
-      _cache.weekly[match.name] = weekly;
+      _cache.weekly[cleanName] = weekly;
       _cache.awards = await dbGetAwards();
       const st = getState();
-      recalcStudentScore(match.name, st);
+      recalcStudentScore(cleanName, st);
       hideLoadingOverlay();
       initApp();
       startStudentAutoRefresh();
@@ -1110,6 +1111,7 @@ function checkWeekStar(wd){
 const checkWeekStarPublic=checkWeekStar;
 
 function recalcStudentScore(name,st){
+  name = name ? name.trim() : name;
   const sc=getScores();
   if(!sc[name]) sc[name]={total:0,attend:0,tahdir:0,kitab:0,abyat:0,hadith:0,wajh:0,badges:{star:0,akhlaq:0,sab:0}};
   console.log('[recalc] name=',JSON.stringify(name),'inExcel=',!!EXCEL_SCORES[name],'weeklyKeys=',Object.keys((st.weekly&&st.weekly[name])||{}));
