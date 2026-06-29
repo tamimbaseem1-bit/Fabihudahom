@@ -122,7 +122,7 @@ const STAR_COLORS=["🟡","⭐","🌙","📚"];
 // ════════════════════ SUPABASE CONFIG ════════════════════
 const SUPABASE_URL = 'https://cakpfqublqgdinaufpae.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_oal3kdLl1J6Yvl3ydt4RXw_RlEjyRte';
-const APP_VERSION = 'v4.3';
+const APP_VERSION = 'v4.4';
 
 // Show version badge on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -503,6 +503,16 @@ async function doLogin(){
       const cleanName = (match.name||'').trim();
       currentUser={...match, name: cleanName, role:'student'};
       document.getElementById('loading-msg').textContent='جاري تحميل بياناتك...';
+      // Pre-populate leaderboard scores from EXCEL_SCORES for all students
+      if(_cache.students){
+        const sc=getScores();
+        for(const s of _cache.students){
+          const n=(s.name||'').trim();
+          const h=EXCEL_SCORES[n]||{};
+          if(!sc[n]) sc[n]={total:h.total||0,attend:h.attend||0,tahdir:h.tahdir||0,kitab:h.kitab||0,abyat:h.abyat||0,hadith:h.hadith||0,wajh:h.wajh||0,badges:{star:0,akhlaq:0,sab:0}};
+        }
+        saveScores(sc);
+      }
       const weekly = await dbGetWeeklyData(cleanName);
       // Merge weekly summaries into weekly cache
       const sums = await dbGetWeeklySummaries(cleanName);
