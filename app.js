@@ -120,9 +120,17 @@ const MAX_DAYS=16;
 const STAR_COLORS=["🟡","⭐","🌙","📚"];
 
 // ════════════════════ SUPABASE CONFIG ════════════════════
-// ⚠️ ضع هنا بيانات مشروعك من Supabase → Settings → API
 const SUPABASE_URL = 'https://cakpfqublqgdinaufpae.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_oal3kdLl1J6Yvl3ydt4RXw_RlEjyRte';
+const APP_VERSION = 'v4.1';
+
+// Show version badge on load
+document.addEventListener('DOMContentLoaded', () => {
+  const badge = document.createElement('div');
+  badge.style.cssText = 'position:fixed;bottom:8px;left:8px;background:#1a1a2e;color:#E8BC5A;font-size:11px;padding:3px 8px;border-radius:20px;z-index:9999;opacity:0.7;font-family:monospace';
+  badge.textContent = APP_VERSION;
+  document.body.appendChild(badge);
+});
 
 const sb = {
   async query(sql, params={}) {
@@ -187,8 +195,13 @@ const sb = {
 // ════════════════════ DB HELPERS ════════════════════
 async function dbGetStudents(){
   const url = `${SUPABASE_URL}/rest/v1/students?select=*&order=name`;
-  const res = await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
-  return res.ok ? await res.json() : [];
+  try {
+    const res = await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
+    if(!res.ok){ console.error('dbGetStudents failed:', res.status, await res.text()); return []; }
+    const data = await res.json();
+    console.log('dbGetStudents:', data.length, 'students loaded');
+    return data;
+  } catch(e){ console.error('dbGetStudents error:', e); return []; }
 }
 
 async function dbSaveStudent(s, isNew=false){
