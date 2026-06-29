@@ -122,7 +122,7 @@ const STAR_COLORS=["🟡","⭐","🌙","📚"];
 // ════════════════════ SUPABASE CONFIG ════════════════════
 const SUPABASE_URL = 'https://cakpfqublqgdinaufpae.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_oal3kdLl1J6Yvl3ydt4RXw_RlEjyRte';
-const APP_VERSION = 'v4.6';
+const APP_VERSION = 'v4.7';
 
 // Show version badge on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -1151,7 +1151,8 @@ function recalcStudentScore(name,st){
       hadith+=(dd.hd||0);
       total+=mp;
     });
-    if(wd.sum){total+=5;}
+    const hasRealData=['d1','d2','d3','d4'].some(d=>wd[d]&&(wd[d].att||wd[d].tah||wd[d].kit||wd[d].aby||wd[d].wj));
+    if(wd.sum && hasRealData){total+=5;}
     if(checkWeekStar(wd)) starCount++;
   }
 
