@@ -122,7 +122,7 @@ const STAR_COLORS=["🟡","⭐","🌙","📚"];
 // ════════════════════ SUPABASE CONFIG ════════════════════
 const SUPABASE_URL = 'https://cakpfqublqgdinaufpae.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_oal3kdLl1J6Yvl3ydt4RXw_RlEjyRte';
-const APP_VERSION = 'v4.7';
+const APP_VERSION = 'v4.8';
 
 // Show version badge on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -1700,10 +1700,10 @@ function showToast(msg){
 // and does not depend on Drive sharing permissions or account session state.
 // This published link uses the SAME tab (gid=0) so column layout is identical.
 const SHEET_PUBLISHED_ID = '2PACX-1vSPzPi4OtZkWtbi5HlxSbCn5mS8fZGgog6_6mqcLn8B4VqUaoMeVCbANUDIxO0mOiIdr8OVbCV9gNGv';
-const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/e/${SHEET_PUBLISHED_ID}/pub?gid=0&single=true&output=csv`;
+const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/e/${SHEET_PUBLISHED_ID}/pub?gid=1921157610&single=true&output=csv`;
 // Fallbacks, in case the published link ever breaks (e.g. republish needed)
 const SHEET_ID = '1T45D8s0fvBN5HuJEGWrE9Et4fTvNMtbpSvYsNbbTe9s';
-const SHEET_GID = '0';
+const SHEET_GID = '1921157610';
 const SHEET_EXPORT_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
 const SHEET_CSV_URL_PROXY2 = `https://api.allorigins.win/raw?url=${encodeURIComponent(SHEET_EXPORT_URL)}`;
 const SHEET_CSV_URL_FALLBACK = SHEET_EXPORT_URL;
