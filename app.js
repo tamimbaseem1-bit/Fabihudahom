@@ -260,6 +260,21 @@ async function dbGetAllWeeklyData(){
     if(!result[row.student_name][wk]) result[row.student_name][wk]={};
     result[row.student_name][wk][row.day_key] = {att:row.att,tah:row.tah,kit:row.kit,aby:row.aby,wj:row.wj,hd:row.hd,hf:row.hf};
   }
+  // Merge weekly summaries (sum field) into result
+  try {
+    const sumUrl = `${SUPABASE_URL}/rest/v1/weekly_summary?select=*`;
+    const sumRes = await fetch(sumUrl,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
+    if(sumRes.ok){
+      const sumRows = await sumRes.json();
+      for(const row of sumRows){
+        if(!row.has_summary) continue;
+        if(!result[row.student_name]) result[row.student_name]={};
+        const wk = 'w'+row.week_num;
+        if(!result[row.student_name][wk]) result[row.student_name][wk]={};
+        result[row.student_name][wk].sum = true;
+      }
+    }
+  } catch(e){}
   return result;
 }
 
@@ -475,6 +490,9 @@ async function doLogin(){
       currentUser={...match,role:'student'};
       document.getElementById('loading-msg').textContent='جاري تحميل بياناتك...';
       const weekly = await dbGetWeeklyData(match.name);
+      // Merge weekly summaries into weekly cache
+      const sums = await dbGetWeeklySummaries(match.name);
+      for(const wk in sums){ if(!weekly[wk]) weekly[wk]={}; weekly[wk].sum=true; }
       if(!_cache.weekly) _cache.weekly={};
       _cache.weekly[match.name] = weekly;
       _cache.awards = await dbGetAwards();
@@ -482,6 +500,7 @@ async function doLogin(){
       recalcStudentScore(match.name, st);
       hideLoadingOverlay();
       initApp();
+      startStudentAutoRefresh();
       showScreen('app-screen');
       setTimeout(checkAndShowNotifications, 600);
     }
@@ -520,7 +539,7 @@ document.getElementById('pw-inp').addEventListener('keydown',e=>{if(e.key==='Ent
 
 function doLogout(){
   currentUser=null;
-  // Clear sensitive cache on logout
+  if(_studentRefreshTimer){ clearInterval(_studentRefreshTimer); _studentRefreshTimer=null; }
   _cache.students=null; _cache.weekly=null; _cache.awards=null; _cache.scores={}; _cache.notifs=null;
   showScreen('portal-screen');
 }
@@ -588,6 +607,25 @@ function initials(name){const p=name.split(' ');return(p[0]?.[0]||'')+(p[1]?.[0]
 function pct(v,max){return Math.round(Math.min(100,(v/max)*100))}
 
 // ════════════════════ APP INIT ════════════════════
+// Auto-refresh student data every 2 minutes to pick up supervisor changes
+let _studentRefreshTimer = null;
+async function startStudentAutoRefresh(){
+  if(_studentRefreshTimer) clearInterval(_studentRefreshTimer);
+  _studentRefreshTimer = setInterval(async () => {
+    if(!currentUser || currentUser.role !== 'student') return;
+    try {
+      const weekly = await dbGetWeeklyData(currentUser.name);
+      const sums = await dbGetWeeklySummaries(currentUser.name);
+      for(const wk in sums){ if(!weekly[wk]) weekly[wk]={}; weekly[wk].sum=true; }
+      _cache.weekly[currentUser.name] = weekly;
+      _cache.awards = await dbGetAwards();
+      const st = getState();
+      recalcStudentScore(currentUser.name, st);
+      initApp(); // re-render
+    } catch(e){}
+  }, 2 * 60 * 1000); // every 2 minutes
+}
+
 function initApp(){
   const name=currentUser.name;
   const sc=getScore(name);
