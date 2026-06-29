@@ -122,7 +122,7 @@ const STAR_COLORS=["🟡","⭐","🌙","📚"];
 // ════════════════════ SUPABASE CONFIG ════════════════════
 const SUPABASE_URL = 'https://cakpfqublqgdinaufpae.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_oal3kdLl1J6Yvl3ydt4RXw_RlEjyRte';
-const APP_VERSION = 'v4.9';
+const APP_VERSION = 'v5.0';
 
 // Show version badge on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -200,7 +200,7 @@ async function dbGetStudents(){
     if(!res.ok){ console.error('dbGetStudents failed:', res.status, await res.text()); return []; }
     const data = await res.json();
     console.log('dbGetStudents:', data.length, 'students loaded');
-    return data;
+    return data.map(s=>({...s, name:(s.name||'').trim()}));
   } catch(e){ console.error('dbGetStudents error:', e); return []; }
 }
 
