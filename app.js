@@ -1108,7 +1108,17 @@ function recalcStudentScore(name,st){
     if(awardsData[key]){ if(awardsData[key].akhlaq) akhlaq++; if(awardsData[key].sab) sab++; }
   }
 
-  let total=0,attend=0,tahdir=0,kitab=0,abyat=0,hadith=0,wajh=0,starCount=0;
+  // Historical base from Google Sheets import
+  const hist = EXCEL_SCORES[name] || {};
+  let total   = hist.total   || 0;
+  let attend  = hist.attend  || 0;
+  let tahdir  = hist.tahdir  || 0;
+  let kitab   = hist.kitab   || 0;
+  let abyat   = hist.abyat   || 0;
+  let hadith  = hist.hadith  || 0;
+  let wajh    = hist.wajh    || 0;
+  let starCount = 0;
+
   const weekly=(st.weekly&&st.weekly[name])||{};
 
   for(let w=1;w<=6;w++){
