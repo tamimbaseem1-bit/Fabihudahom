@@ -122,7 +122,7 @@ const STAR_COLORS=["🟡","⭐","🌙","📚"];
 // ════════════════════ SUPABASE CONFIG ════════════════════
 const SUPABASE_URL = 'https://cakpfqublqgdinaufpae.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_oal3kdLl1J6Yvl3ydt4RXw_RlEjyRte';
-const APP_VERSION = 'v4.1';
+const APP_VERSION = 'v4.2';
 
 // Show version badge on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -1112,6 +1112,7 @@ const checkWeekStarPublic=checkWeekStar;
 function recalcStudentScore(name,st){
   const sc=getScores();
   if(!sc[name]) sc[name]={total:0,attend:0,tahdir:0,kitab:0,abyat:0,hadith:0,wajh:0,badges:{star:0,akhlaq:0,sab:0}};
+  console.log('[recalc] name=',JSON.stringify(name),'inExcel=',!!EXCEL_SCORES[name],'weeklyKeys=',Object.keys((st.weekly&&st.weekly[name])||{}));
 
   // Get akhlaq/sab from weeklyAwards (the authoritative source), not from cached badges
   const awardsData = st.weeklyAwards || {};
@@ -1155,6 +1156,7 @@ function recalcStudentScore(name,st){
   const badges={star:starCount,akhlaq,sab};
   sc[name]={total,attend,tahdir,kitab,abyat,hadith,wajh,badges};
   saveScores(sc);
+  console.log('[recalc] result for',name,'→ total=',total);
   return{starCount};
 }
 
