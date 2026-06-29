@@ -122,7 +122,7 @@ const STAR_COLORS=["🟡","⭐","🌙","📚"];
 // ════════════════════ SUPABASE CONFIG ════════════════════
 const SUPABASE_URL = 'https://cakpfqublqgdinaufpae.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_oal3kdLl1J6Yvl3ydt4RXw_RlEjyRte';
-const APP_VERSION = 'v5.0';
+const APP_VERSION = 'v5.1';
 
 // Show version badge on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -249,8 +249,9 @@ async function dbDeleteStudent(name){
 async function dbGetWeeklyData(studentName){
   const url = `${SUPABASE_URL}/rest/v1/weekly_data?student_name=eq.${encodeURIComponent(studentName)}&select=*`;
   const res = await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
-  if(!res.ok) return {};
+  if(!res.ok){ console.error('[dbGetWeeklyData] failed', res.status, studentName); return {}; }
   const rows = await res.json();
+  console.log('[dbGetWeeklyData] name=',JSON.stringify(studentName),'rows=',rows.length);
   // Convert to nested {w1:{d1:{...},d2:{...}}} format
   const result = {};
   for(const row of rows){
